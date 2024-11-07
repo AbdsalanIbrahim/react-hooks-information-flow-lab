@@ -1,36 +1,34 @@
 import React, { useState } from "react";
+import Filter from "./Filter";
 import Item from "./Item";
 
-function ShoppingList({ items }) {
-  const [selectedCategory, setSelectedCategory] = useState("All");
+function ShoppingList() {
+  const [category, setCategory] = useState("All");
+  const [items, setItems] = useState([
+    { name: "Yogurt", category: "Dairy" },
+    { name: "Pomegranate", category: "Produce" },
+    // Add more items as needed
+  ]);
 
-  function handleCategoryChange(event) {
-    setSelectedCategory(event.target.value);
+  function handleCategoryChange(newCategory) {
+    setCategory(newCategory);
   }
 
-  const itemsToDisplay = items.filter((item) => {
-    if (selectedCategory === "All") return true;
-
-    return item.category === selectedCategory;
-  });
+  const filteredItems = items.filter((item) =>
+    category === "All" || item.category === category
+  );
 
   return (
-    <div className="ShoppingList">
-      <div className="Filter">
-        <select name="filter" onChange={handleCategoryChange}>
-          <option value="All">Filter by category</option>
-          <option value="Produce">Produce</option>
-          <option value="Dairy">Dairy</option>
-          <option value="Dessert">Dessert</option>
-        </select>
-      </div>
-      <ul className="Items">
-        {itemsToDisplay.map((item) => (
-          <Item key={item.id} name={item.name} category={item.category} />
-        ))}
-      </ul>
+    <div>
+      <Filter onCategoryChange={handleCategoryChange} />
+      {filteredItems.map((item, index) => (
+        <Item key={index} item={item} />
+      ))}
     </div>
   );
 }
 
 export default ShoppingList;
+
+
+
